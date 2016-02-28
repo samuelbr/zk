@@ -28,7 +28,8 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 	 * @return JSON text, or "null" if list is null.
 	 */
 	public static String toJSONString(Collection collection){
-		return toJSONString(collection, new StringBuilder()).toString();
+		int bufferSize = collection == null || collection.isEmpty() ? 4 : collection.size()*17;
+		return toJSONString(collection, new StringBuilder(bufferSize)).toString();
 	}
 	
 	public static StringBuilder toJSONString(Collection collection, StringBuilder sb){
@@ -60,7 +61,8 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 	 * <p>patched by tomyeh
 	 */
 	public static String toJSONString(Object[] ary) {
-		return toJSONString(ary, new StringBuilder()).toString();
+		int bufferSize = ary == null || ary.length == 0 ? 4 : ary.length * 17;
+		return toJSONString(ary, new StringBuilder(bufferSize)).toString();
 	}
 	
 	public static StringBuilder toJSONString(Object[] ary, StringBuilder sb) {
@@ -79,7 +81,8 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 	 * <p>patched by tomyeh
 	 */
 	public static String toJSONString(int[] ary) {
-		return toJSONString(ary, new StringBuilder()).toString();
+		int bufferSize = ary == null || ary.length == 0 ? 4 : ary.length * 6;
+		return toJSONString(ary, new StringBuilder(bufferSize)).toString();
 	}
 	
 	public static StringBuilder toJSONString(int[] ary, StringBuilder sb) {
@@ -98,7 +101,8 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 	 * <p>patched by tomyeh
 	 */
 	public static String toJSONString(long[] ary) {
-		return toJSONString(ary, new StringBuilder()).toString();
+		int bufferSize = ary == null || ary.length == 0 ? 4 : ary.length * 8;
+		return toJSONString(ary, new StringBuilder(bufferSize)).toString();
 	}
 	
 	public static StringBuilder toJSONString(long[] ary, StringBuilder sb) {
@@ -117,7 +121,8 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 	 * <p>patched by tomyeh
 	 */
 	public static String toJSONString(short[] ary) {
-		return toJSONString(ary, new StringBuilder()).toString();
+		int bufferSize = ary == null || ary.length == 0 ? 4 : ary.length * 6;
+		return toJSONString(ary, new StringBuilder(bufferSize)).toString();
 	}
 	
 	public static StringBuilder toJSONString(short[] ary, StringBuilder sb) {
@@ -136,7 +141,8 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 	 * <p>patched by tomyeh
 	 */
 	public static String toJSONString(float[] ary) {
-		return toJSONString(ary, new StringBuilder()).toString();
+		int bufferSize = ary == null || ary.length == 0 ? 4 : ary.length * 10;
+		return toJSONString(ary, new StringBuilder(bufferSize)).toString();
 	}
 	
 	public static StringBuilder toJSONString(float[] ary, StringBuilder sb) {
@@ -155,7 +161,8 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 	 * <p>patched by tomyeh
 	 */
 	public static String toJSONString(double[] ary) {
-		return toJSONString(ary, new StringBuilder()).toString();
+		int bufferSize = ary == null || ary.length == 0 ? 4 : ary.length * 10;
+		return toJSONString(ary, new StringBuilder(bufferSize)).toString();
 	}
 	
 	public static StringBuilder toJSONString(double[] ary, StringBuilder sb) {
@@ -174,7 +181,8 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 	 * <p>patched by tomyeh
 	 */
 	public static String toJSONString(byte[] ary) {
-		return toJSONString(ary, new StringBuilder()).toString();
+		int bufferSize = ary == null || ary.length == 0 ? 4 : ary.length * 4;
+		return toJSONString(ary, new StringBuilder(bufferSize)).toString();
 	}
 
 	public static StringBuilder toJSONString(byte[] ary, StringBuilder sb) {
@@ -194,7 +202,8 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 	 * <p>patched by tomyeh
 	 */
 	public static String toJSONString(boolean[] ary) {
-		return toJSONString(ary, new StringBuilder()).toString();
+		int bufferSize = ary == null || ary.length == 0 ? 4 : ary.length * 6;
+		return toJSONString(ary, new StringBuilder(bufferSize)).toString();
 	}
 	
 	public static StringBuilder toJSONString(boolean[] ary, StringBuilder sb) {
@@ -213,7 +222,8 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 	 * <p>patched by tomyeh
 	 */
 	public static String toJSONString(char[] ary) {
-		return toJSONString(ary, new StringBuilder()).toString();
+		int bufferSize = ary == null || ary.length == 0 ? 4 : ary.length * 2;
+		return toJSONString(ary, new StringBuilder(bufferSize)).toString();
 	}
 	
 	public static StringBuilder toJSONString(char[] ary, StringBuilder sb) {
@@ -236,14 +246,14 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 		return toJSONString(this);
 	}
 	
-	public void toJSONString(StringBuilder sb) {
-		// TODO Auto-generated method stub
+	public StringBuilder toJSONString(StringBuilder sb) {
+		return toJSONString(this, sb);
 	}
 	
 	/** Encodes this object to a JSON string.
 	 * It is the same as {@link #toJSONString()}.
 	 */	
 	public String toString() {
-		return toJSONString();
+		return toJSONString(new StringBuilder(size()*17)).toString();
 	}
 }
