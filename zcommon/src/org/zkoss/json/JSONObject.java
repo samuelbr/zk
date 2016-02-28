@@ -27,10 +27,14 @@ public class JSONObject extends LinkedHashMap<Object, Object> implements Map<Obj
 	 * @return JSON text, or "null" if map is null.
 	 */
 	public static String toJSONString(Map map){
+		int bufferSize = map == null || map.isEmpty() ? 4 : map.size()*32;
+		return toJSONString(map, new StringBuilder(bufferSize)).toString();
+	}
+	
+	public static StringBuilder toJSONString(Map map, StringBuilder sb){
 		if(map == null)
-			return "null";
+			return sb.append("null");
 		
-		StringBuilder sb = new StringBuilder();
         boolean first = true;
 		Iterator iter=map.entrySet().iterator();
 		
@@ -45,14 +49,18 @@ public class JSONObject extends LinkedHashMap<Object, Object> implements Map<Obj
 			toJSONString(String.valueOf(entry.getKey()),entry.getValue(), sb);
 		}
         sb.append('}');
-		return sb.toString();
-	}
+		return sb;
+	}	
 	
 	/** Encodes this object to a JSON string.
 	 * It is the same as {@link #toString()}.
 	 */	
 	public String toJSONString(){
 		return toJSONString(this);
+	}
+	
+	public StringBuilder toJSONString(StringBuilder sb) {
+		return toJSONString(this, sb);
 	}
 	
 	private static String toJSONString(String key,Object value, StringBuilder sb){
