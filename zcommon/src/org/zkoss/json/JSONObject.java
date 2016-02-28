@@ -30,7 +30,7 @@ public class JSONObject extends LinkedHashMap<Object, Object> implements Map<Obj
 		if(map == null)
 			return "null";
 		
-        StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
         boolean first = true;
 		Iterator iter=map.entrySet().iterator();
 		
@@ -55,7 +55,7 @@ public class JSONObject extends LinkedHashMap<Object, Object> implements Map<Obj
 		return toJSONString(this);
 	}
 	
-	private static String toJSONString(String key,Object value, StringBuffer sb){
+	private static String toJSONString(String key,Object value, StringBuilder sb){
 		sb.append('\"');
         if(key == null)
             sb.append("null");
@@ -76,7 +76,7 @@ public class JSONObject extends LinkedHashMap<Object, Object> implements Map<Obj
 	}
 
 	public static String toString(String key,Object value){
-        StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		toJSONString(key, value, sb);
         return sb.toString();
 	}

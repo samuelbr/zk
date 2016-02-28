@@ -5,8 +5,8 @@
 package org.zkoss.json;
 
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -32,7 +32,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 			return "null";
 		
         boolean first = true;
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 		Iterator iter=collection.iterator();
         
         sb.append('[');
@@ -60,7 +60,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 		if (ary == null)
 			return "null";
 
-		final StringBuffer sb = new StringBuffer().append('[');
+		final StringBuilder sb = new StringBuilder().append('[');
 		for (int j = 0; j < ary.length; j++) {
 			if (j > 0) sb.append(',');
 			sb.append(JSONValue.toJSONString(ary[j]));
@@ -74,7 +74,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 		if (ary == null)
 			return "null";
 
-		final StringBuffer sb = new StringBuffer().append('[');
+		final StringBuilder sb = new StringBuilder().append('[');
 		for (int j = 0; j < ary.length; j++) {
 			if (j > 0) sb.append(',');
 			sb.append(JSONValue.toJSONString(ary[j]));
@@ -88,7 +88,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 		if (ary == null)
 			return "null";
 
-		final StringBuffer sb = new StringBuffer().append('[');
+		final StringBuilder sb = new StringBuilder().append('[');
 		for (int j = 0; j < ary.length; j++) {
 			if (j > 0) sb.append(',');
 			sb.append(JSONValue.toJSONString(ary[j]));
@@ -102,7 +102,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 		if (ary == null)
 			return "null";
 
-		final StringBuffer sb = new StringBuffer().append('[');
+		final StringBuilder sb = new StringBuilder().append('[');
 		for (int j = 0; j < ary.length; j++) {
 			if (j > 0) sb.append(',');
 			sb.append(JSONValue.toJSONString(ary[j]));
@@ -116,7 +116,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 		if (ary == null)
 			return "null";
 
-		final StringBuffer sb = new StringBuffer().append('[');
+		final StringBuilder sb = new StringBuilder().append('[');
 		for (int j = 0; j < ary.length; j++) {
 			if (j > 0) sb.append(',');
 			sb.append(JSONValue.toJSONString(ary[j]));
@@ -130,7 +130,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 		if (ary == null)
 			return "null";
 
-		final StringBuffer sb = new StringBuffer().append('[');
+		final StringBuilder sb = new StringBuilder().append('[');
 		for (int j = 0; j < ary.length; j++) {
 			if (j > 0) sb.append(',');
 			sb.append(JSONValue.toJSONString(ary[j]));
@@ -144,7 +144,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 		if (ary == null)
 			return "null";
 
-		final StringBuffer sb = new StringBuffer().append('[');
+		final StringBuilder sb = new StringBuilder().append('[');
 		for (int j = 0; j < ary.length; j++) {
 			if (j > 0) sb.append(',');
 			sb.append(JSONValue.toJSONString(ary[j]));
@@ -158,7 +158,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 		if (ary == null)
 			return "null";
 
-		final StringBuffer sb = new StringBuffer().append('[');
+		final StringBuilder sb = new StringBuilder().append('[');
 		for (int j = 0; j < ary.length; j++) {
 			if (j > 0) sb.append(',');
 			sb.append(JSONValue.toJSONString(ary[j]));
@@ -172,7 +172,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 		if (ary == null)
 			return "null";
 
-		final StringBuffer sb = new StringBuffer().append('[');
+		final StringBuilder sb = new StringBuilder().append('[');
 		for (int j = 0; j < ary.length; j++) {
 			if (j > 0) sb.append(',');
 			sb.append(JSONValue.toJSONString(ary[j]));
