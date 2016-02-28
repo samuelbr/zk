@@ -245,7 +245,13 @@ public class AuResponse {
 			_d = d;
 		}
 		public String toJSONString() {
-			return "jq.j2d('" + JSONs.d2j(_d) + "')";
+			return toJSONString(new StringBuilder(40)).toString();
+		}
+		
+		public StringBuilder toJSONString(StringBuilder sb) {
+			return sb.append("jq.j2d('")
+				.append(JSONs.d2j(_d))
+				.append("')");
 		}
 	}
 	private static class JSONComponent implements JSONAware {
@@ -254,7 +260,16 @@ public class AuResponse {
 			_comp = comp;
 		}
 		public String toJSONString() {
-			return _comp.getPage() == null ? "null": "{$u:'" + _comp.getUuid() + "'}";
+			return toJSONString(new StringBuilder()).toString();
+		}
+		
+		public StringBuilder toJSONString(StringBuilder sb) {
+			if (_comp.getPage() == null) {
+				return sb.append("null");
+			}
+			return sb.append("{$u:'")
+					.append(_comp.getUuid())
+					.append("'}");
 		}
 	}
 }
