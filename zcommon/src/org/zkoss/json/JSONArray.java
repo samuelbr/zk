@@ -22,7 +22,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 	 * Convert a list to JSON text. The result is a JSON array. 
 	 * If this list is also a JSONAware, JSONAware specific behaviors will be omitted at this top level.
 	 * 
-	 * @see JSONValue#toJSONString(Object)
+	 * @see JSONValue#toJSONString(Object, StringBuilder)
 	 * 
 	 * @param collection
 	 * @return JSON text, or "null" if list is null.
@@ -51,7 +51,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 				sb.append("null");
 				continue;
 			}
-			sb.append(JSONValue.toJSONString(value));
+			JSONValue.toJSONString(value, sb);
 		}
         sb.append(']');
         return sb;
@@ -72,7 +72,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 		sb.append('[');
 		for (int j = 0; j < ary.length; j++) {
 			if (j > 0) sb.append(',');
-			sb.append(JSONValue.toJSONString(ary[j]));
+			JSONValue.toJSONString(ary[j], sb);
 		}
 		return sb.append(']');
 	}
@@ -92,7 +92,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 		sb.append('[');
 		for (int j = 0; j < ary.length; j++) {
 			if (j > 0) sb.append(',');
-			sb.append(JSONValue.toJSONString(ary[j]));
+			JSONValue.toJSONString(ary[j], sb);
 		}
 		return sb.append(']');		
 	}
@@ -112,7 +112,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 		sb.append('[');
 		for (int j = 0; j < ary.length; j++) {
 			if (j > 0) sb.append(',');
-			sb.append(JSONValue.toJSONString(ary[j]));
+			JSONValue.toJSONString(ary[j], sb);
 		}
 		return sb.append(']');		
 	}
@@ -132,7 +132,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 		sb.append('[');
 		for (int j = 0; j < ary.length; j++) {
 			if (j > 0) sb.append(',');
-			sb.append(JSONValue.toJSONString(ary[j]));
+			JSONValue.toJSONString(ary[j], sb);
 		}
 		return sb.append(']');		
 	}
@@ -152,7 +152,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 		sb.append('[');
 		for (int j = 0; j < ary.length; j++) {
 			if (j > 0) sb.append(',');
-			sb.append(JSONValue.toJSONString(ary[j]));
+			JSONValue.toJSONString(ary[j], sb);
 		}
 		return sb.append(']');		
 	}
@@ -172,7 +172,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 		sb.append('[');
 		for (int j = 0; j < ary.length; j++) {
 			if (j > 0) sb.append(',');
-			sb.append(JSONValue.toJSONString(ary[j]));
+			JSONValue.toJSONString(ary[j], sb);
 		}
 		return sb.append(']');
 	}	
@@ -192,7 +192,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 		sb.append('[');
 		for (int j = 0; j < ary.length; j++) {
 			if (j > 0) sb.append(',');
-			sb.append(JSONValue.toJSONString(ary[j]));
+			JSONValue.toJSONString(ary[j], sb);
 		}
 		return sb.append(']');
 	}
@@ -213,7 +213,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 		sb.append('[');
 		for (int j = 0; j < ary.length; j++) {
 			if (j > 0) sb.append(',');
-			sb.append(JSONValue.toJSONString(ary[j]));
+			JSONValue.toJSONString(ary[j], sb);
 		}
 		return sb.append(']');
 	}	
@@ -233,7 +233,7 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 		sb.append('[');
 		for (int j = 0; j < ary.length; j++) {
 			if (j > 0) sb.append(',');
-			sb.append(JSONValue.toJSONString(ary[j]));
+			JSONValue.toJSONString(ary[j], sb);
 		}
 		return sb.append(']');		
 	}
@@ -254,6 +254,6 @@ public class JSONArray extends LinkedList<Object> implements List<Object>, JSONA
 	 * It is the same as {@link #toJSONString()}.
 	 */	
 	public String toString() {
-		return toJSONString(new StringBuilder(size()*17)).toString();
+		return toJSONString(new StringBuilder(size()*17+2)).toString();
 	}
 }

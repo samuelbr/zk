@@ -21,7 +21,7 @@ public class JSONObject extends LinkedHashMap<Object, Object> implements Map<Obj
 	 * Convert (aka., encode) a map to JSON text. The result is a JSON object. 
 	 * If this map is also a JSONAware, JSONAware specific behaviors will be omitted at this top level.
 	 * 
-	 * @see JSONValue#toJSONString(Object)
+	 * @see JSONValue#toJSONString(Object, StringBuilder)
 	 * 
 	 * @param map
 	 * @return JSON text, or "null" if map is null.
@@ -63,7 +63,7 @@ public class JSONObject extends LinkedHashMap<Object, Object> implements Map<Obj
 		return toJSONString(this, sb);
 	}
 	
-	private static String toJSONString(String key,Object value, StringBuilder sb){
+	private static void toJSONString(String key,Object value, StringBuilder sb){
 		sb.append('\"');
         if(key == null)
             sb.append("null");
@@ -71,9 +71,7 @@ public class JSONObject extends LinkedHashMap<Object, Object> implements Map<Obj
             JSONValue.escape(key, sb);
 		sb.append('\"').append(':');
 		
-		sb.append(JSONValue.toJSONString(value));
-		
-		return sb.toString();
+		JSONValue.toJSONString(value, sb);
 	}
 
 	/** Encodes this object to a JSON string.
