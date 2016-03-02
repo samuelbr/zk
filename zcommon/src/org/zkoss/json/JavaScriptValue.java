@@ -37,6 +37,11 @@ public class JavaScriptValue implements org.zkoss.json.JSONAware {
 	public String toJSONString() {
 		return _js;
 	}
+	
+	public StringBuilder toJSONString(StringBuilder sb) {
+		return sb.append(_js);
+	}
+	
 	//Object//
 	public int hashCode() {
 		return _js.hashCode();

@@ -7,7 +7,6 @@ package org.zkoss.json;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import org.zkoss.json.parser.JSONParser;
@@ -128,54 +127,155 @@ public class JSONValue {
 		
 		return value.toString();
 	}
+	
+	public static StringBuilder toJSONString(Object value, StringBuilder sb){
+		if(value == null)
+			return sb.append("null");
+		
+		if(value instanceof String) {
+			sb.append('\"');
+			escape((String) value, sb);
+			sb.append('\"');
+		}
+		
+		if(value instanceof Double){
+			if(((Double)value).isInfinite() || ((Double)value).isNaN())
+				return sb.append("null");
+			else
+				return sb.append(value);
+		}
+		
+		if(value instanceof Float){
+			if(((Float)value).isInfinite() || ((Float)value).isNaN())
+				return sb.append("null");
+			else
+				return sb.append(value);
+		}
+		
+		if((value instanceof JSONAware))
+			return ((JSONAware)value).toJSONString(sb);
+		
+		if(value instanceof Map)
+			return JSONObject.toJSONString((Map)value, sb);
+		
+		if(value instanceof Collection) //proposed enhancement F65-ZK-1866 use Collection instead of List
+			return JSONArray.toJSONString((Collection)value, sb);
+		
+		if (value.getClass().isArray()) {
+			if (value instanceof Object[])
+				return JSONArray.toJSONString((Object[])value, sb);
+			if (value instanceof int[])
+				return JSONArray.toJSONString((int[])value, sb);
+			if (value instanceof double[])
+				return JSONArray.toJSONString((double[])value, sb);
+			if (value instanceof long[])
+				return JSONArray.toJSONString((long[])value, sb);
+			if (value instanceof float[])
+				return JSONArray.toJSONString((float[])value, sb);
+			if (value instanceof short[])
+				return JSONArray.toJSONString((short[])value, sb);
+			if (value instanceof byte[])
+				return JSONArray.toJSONString((byte[])value, sb);
+			if (value instanceof boolean[])
+				return JSONArray.toJSONString((boolean[])value, sb);
+			if (value instanceof char[])
+				return JSONArray.toJSONString((char[])value, sb);
+		}
+
+		if(value instanceof Enum) {//proposed enhancement F65-ZK-1866 provide a default Enum conversion
+			sb.append('\"');
+			escape(value.toString(), sb);
+			return sb.append('\"');
+		}
+		
+		return sb.append(value);
+	}	
+	
+	
 	/** Converts an integer to JSON text
 	 * <p>patched by tomyeh
 	 */
 	public static String toJSONString(int value) {
 		return Integer.toString(value);
 	}
+	
+	public static StringBuilder toJSONString(int value, StringBuilder sb) {
+		return sb.append(value);
+	}	
+	
 	/** Converts a long to JSON text
 	 * <p>patched by tomyeh
 	 */
 	public static String toJSONString(long value) {
 		return Long.toString(value);
 	}
+	
+	public static StringBuilder toJSONString(long value, StringBuilder sb) {
+		return sb.append(value);
+	}		
+	
 	/** Converts a short to JSON text
 	 * <p>patched by tomyeh
 	 */
 	public static String toJSONString(short value) {
 		return Long.toString(value);
 	}
+	
+	public static StringBuilder toJSONString(short value, StringBuilder sb) {
+		return sb.append(value);
+	}
+		
 	/** Converts a double to JSON text
 	 * <p>patched by tomyeh
 	 */
 	public static String toJSONString(double value) {
 		return Double.toString(value);
 	}
+	
+	public static StringBuilder toJSONString(double value, StringBuilder sb) {
+		return sb.append(value);
+	}	
 	/** Converts a float to JSON text
 	 * <p>patched by tomyeh
 	 */
 	public static String toJSONString(float value) {
 		return Float.toString(value);
 	}
+	
+	public static StringBuilder toJSONString(float value, StringBuilder sb) {
+		return sb.append(value);
+	}	
 	/** Converts a byte to JSON text
 	 * <p>patched by tomyeh
 	 */
 	public static String toJSONString(byte value) {
 		return Byte.toString(value);
 	}
+	
+	public static StringBuilder toJSONString(byte value, StringBuilder sb) {
+		return sb.append(value);
+	}
+	
 	/** Converts a boolean to JSON text
 	 * <p>patched by tomyeh
 	 */
 	public static String toJSONString(boolean value) {
 		return Boolean.toString(value);
 	}
+	
+	public static StringBuilder toJSONString(boolean value, StringBuilder sb) {
+		return sb.append(value);
+	}	
 	/** Converts a char to JSON text
 	 * <p>patched by tomyeh
 	 */
 	public static String toJSONString(char value) {
 		return toJSONString("" + value);
 	}
+	
+	public static StringBuilder toJSONString(char value, StringBuilder sb) {
+		return sb.append(value);
+	}	
 
 	/**
 	 * Escape quotes, \, /, \r, \n, \b, \f, \t and other control characters (U+0000 through U+001F).
@@ -185,7 +285,7 @@ public class JSONValue {
 	static String escape(String s){
 		if(s==null)
 			return null;
-        StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
         escape(s, sb);
         return sb.toString();
     }
@@ -194,7 +294,7 @@ public class JSONValue {
      * @param s - Must not be null.
      * @param sb
      */
-    static void escape(String s, StringBuffer sb) {
+    static void escape(String s, StringBuilder sb) {
 		for(int i=0;i<s.length();i++){
 			char ch=s.charAt(i);
 			switch(ch){

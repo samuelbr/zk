@@ -21,16 +21,20 @@ public class JSONObject extends LinkedHashMap<Object, Object> implements Map<Obj
 	 * Convert (aka., encode) a map to JSON text. The result is a JSON object. 
 	 * If this map is also a JSONAware, JSONAware specific behaviors will be omitted at this top level.
 	 * 
-	 * @see JSONValue#toJSONString(Object)
+	 * @see JSONValue#toJSONString(Object, StringBuilder)
 	 * 
 	 * @param map
 	 * @return JSON text, or "null" if map is null.
 	 */
 	public static String toJSONString(Map map){
+		int bufferSize = map == null || map.isEmpty() ? 4 : map.size()*32;
+		return toJSONString(map, new StringBuilder(bufferSize)).toString();
+	}
+	
+	public static StringBuilder toJSONString(Map map, StringBuilder sb){
 		if(map == null)
-			return "null";
+			return sb.append("null");
 		
-        StringBuffer sb = new StringBuffer();
         boolean first = true;
 		Iterator iter=map.entrySet().iterator();
 		
@@ -45,8 +49,8 @@ public class JSONObject extends LinkedHashMap<Object, Object> implements Map<Obj
 			toJSONString(String.valueOf(entry.getKey()),entry.getValue(), sb);
 		}
         sb.append('}');
-		return sb.toString();
-	}
+		return sb;
+	}	
 	
 	/** Encodes this object to a JSON string.
 	 * It is the same as {@link #toString()}.
@@ -55,7 +59,11 @@ public class JSONObject extends LinkedHashMap<Object, Object> implements Map<Obj
 		return toJSONString(this);
 	}
 	
-	private static String toJSONString(String key,Object value, StringBuffer sb){
+	public StringBuilder toJSONString(StringBuilder sb) {
+		return toJSONString(this, sb);
+	}
+	
+	private static void toJSONString(String key,Object value, StringBuilder sb){
 		sb.append('\"');
         if(key == null)
             sb.append("null");
@@ -63,9 +71,7 @@ public class JSONObject extends LinkedHashMap<Object, Object> implements Map<Obj
             JSONValue.escape(key, sb);
 		sb.append('\"').append(':');
 		
-		sb.append(JSONValue.toJSONString(value));
-		
-		return sb.toString();
+		JSONValue.toJSONString(value, sb);
 	}
 
 	/** Encodes this object to a JSON string.
@@ -76,7 +82,7 @@ public class JSONObject extends LinkedHashMap<Object, Object> implements Map<Obj
 	}
 
 	public static String toString(String key,Object value){
-        StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		toJSONString(key, value, sb);
         return sb.toString();
 	}
