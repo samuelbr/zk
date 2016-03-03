@@ -135,7 +135,7 @@ public class JSONValue {
 		if(value instanceof String) {
 			sb.append('\"');
 			escape((String) value, sb);
-			sb.append('\"');
+			return sb.append('\"');
 		}
 		
 		if(value instanceof Double){
