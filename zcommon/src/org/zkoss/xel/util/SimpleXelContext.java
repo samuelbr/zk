@@ -64,7 +64,7 @@ public class SimpleXelContext implements XelContext {
 	}
 
 	private Map<String, Object> attrs() {
-		return _attrs != null ? _attrs: (_attrs = new HashMap<String, Object>());
+		return _attrs != null ? _attrs: (_attrs = new HashMap<String, Object>(4));
 	}
 	public Object getAttribute(String name) {
 		return _attrs != null ? _attrs.get(name):  null;

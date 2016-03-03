@@ -48,7 +48,7 @@ public class BindContextImpl implements BindContext {
 		this._command = command;
 		this._component = comp;
 		this._event = event;
-		this._attrs = new HashMap<Object, Object>();
+		this._attrs = new HashMap<Object, Object>(4);
 	}
 	public Binder getBinder() {
 		return this._binder;
