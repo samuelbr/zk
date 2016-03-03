@@ -187,7 +187,7 @@ try {
 
 	private static class Implicit {
 		/** Implicit variables. */
-		private final Map<String, Object> _vars = new HashMap<String, Object>();
+		private final Map<String, Object> _vars = new HashMap<String, Object>(4);
 
 		private Implicit() {
 		}
