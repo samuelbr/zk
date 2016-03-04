@@ -478,7 +478,7 @@ public class TrackerImpl implements Tracker, Serializable {
 	
 	//Returns equal beans with the given bean in an IdentityHashSet() 
 	public Set<Object> getEqualBeans(Object bean) {
-		return _equalBeansMap.getEqualBeans(bean); //return a set of equal beans
+		return new IdentityHashSet<Object>(_equalBeansMap.getEqualBeans(bean)); //return a set of equal beans
 	}
 	
 	private void readObject(java.io.ObjectInputStream s)
@@ -580,7 +580,7 @@ public class TrackerImpl implements Tracker, Serializable {
 					equalBeans = _identityMap.get(bean);
 				}
 			}
-			return equalBeans == null ? Collections.emptySet() : equalBeans.getBeans(); 
+			return equalBeans == null ? Collections.emptySet() : equalBeans.getBeansSetView(); 
 		}
 		
 		public int size() {
@@ -609,6 +609,11 @@ public class TrackerImpl implements Tracker, Serializable {
 		public Set<Object> getBeans() {
 			return _beanSet != null ? 
 					new IdentityHashSet<Object>(_beanSet.keySet()) : Collections.emptySet();
+		}
+		
+		public Set<Object> getBeansSetView() {
+			return _beanSet != null ? 
+					_beanSet.keySet() : Collections.emptySet();
 		}
 		
 		//return proxy bean(could be migrated or not)
