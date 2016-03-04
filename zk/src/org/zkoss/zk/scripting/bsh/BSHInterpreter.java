@@ -18,6 +18,7 @@ package org.zkoss.zk.scripting.bsh;
 
 import java.lang.reflect.Field;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Collection;
 import java.io.Serializable;
@@ -54,6 +55,7 @@ import org.zkoss.zk.ui.ext.ScopeListener;
 import org.zkoss.zk.scripting.util.GenericInterpreter;
 import org.zkoss.zk.scripting.SerializableAware;
 import org.zkoss.zk.scripting.HierachicalAware;
+import org.zkoss.zk.scripting.Interpreter;
 
 /**
  * The interpreter that uses BeanShell to interpret zscript codes.
@@ -329,9 +331,9 @@ implements SerializableAware, HierachicalAware {
 	/*package*/ static BSHInterpreter getInterpreter(Scope scope) {
 		Page owner = getPage(scope);
 		if (owner != null) {
-			for (Iterator it = owner.getLoadedInterpreters().iterator();
-			it.hasNext();) {
-				final Object ip = it.next();
+			List<Interpreter> loadedInterpreters = owner.getLoadedInterpreters();
+			for (int i=0; i<loadedInterpreters.size(); i++) {
+				final Interpreter ip = loadedInterpreters.get(i);
 				if (ip instanceof BSHInterpreter)
 					return (BSHInterpreter)ip;
 			}

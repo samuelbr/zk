@@ -147,6 +147,8 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	private Class<? extends ExpressionFactory> _expfcls;
 	/** A map of interpreters Map(String zslang, Interpreter ip). */
 	private transient Map<String, Interpreter> _ips;
+	/** A list of interpreters for fast access - avoid to create iterators in loops*/
+	private transient List<Interpreter> _ipsList;
 	/** The mapper representing all mappers being added to this page. */
 	private final FunctionMapper _mapper = new PageFuncMapper();
 	/** A list of {@link FunctionMapper}. */
@@ -237,6 +239,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	 */
 	protected void init() {
 		_ips = new LinkedHashMap<String, Interpreter>(2);
+		_ipsList = new ArrayList<Interpreter>(4);
 		_attrs = new SimpleScope(this);
 	}
 
@@ -491,7 +494,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		}
 	}
 	public Class<?> getZScriptClass(String clsnm) {
-		for (Interpreter ip: getLoadedInterpreters()) {
+		final List<Interpreter> loadedInterpreters = getLoadedInterpreters();
+		for (int i=0; i<loadedInterpreters.size(); i++) {
+			Interpreter ip = loadedInterpreters.get(i);
 			Class<?> cls = ip.getClass(clsnm);
 			if (cls != null)
 				return cls;
@@ -499,16 +504,19 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return null; //Since ZK 6, we don't look for the current thread's class loader
 	}
 	public Function getZScriptFunction(String name, Class[] argTypes) {
-		for (Interpreter ip: getLoadedInterpreters()) {
+		final List<Interpreter> loadedInterpreters = getLoadedInterpreters();
+		for (int i=0; i<loadedInterpreters.size(); i++) {
+			Interpreter ip = loadedInterpreters.get(i);
 			Function mtd = ip.getFunction(name, argTypes);
 			if (mtd != null)
 				return mtd;
 		}
 		return null;
 	}
-	public Function getZScriptFunction(
-	Component comp, String name, Class[] argTypes) {
-		for (Interpreter ip: getLoadedInterpreters()) {
+	public Function getZScriptFunction(Component comp, String name, Class[] argTypes) {
+		final List<Interpreter> loadedInterpreters = getLoadedInterpreters();
+		for (int i=0; i<loadedInterpreters.size(); i++) {
+			Interpreter ip = loadedInterpreters.get(i);
 			Function mtd =
 				ip instanceof HierachicalAware ?
 				((HierachicalAware)ip).getFunction(comp, name, argTypes):
@@ -520,7 +528,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	}
 
 	public Object getZScriptVariable(String name) {
-		for (Interpreter ip: getLoadedInterpreters()) {
+		final List<Interpreter> loadedInterpreters = getLoadedInterpreters();
+		for (int i=0; i<loadedInterpreters.size(); i++) {
+			Interpreter ip = loadedInterpreters.get(i);
 			final Object val = ip.getVariable(name);
 			if (val != null)
 				return val;
@@ -528,7 +538,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return null;
 	}
 	public Object getZScriptVariable(Component comp, String name) {
-		for (Interpreter ip: getLoadedInterpreters()) {
+		final List<Interpreter> loadedInterpreters = getLoadedInterpreters();
+		for (int i=0; i<loadedInterpreters.size(); i++) {
+			Interpreter ip = loadedInterpreters.get(i);
 			final Object val = ip instanceof HierachicalAware ?
 				((HierachicalAware)ip).getVariable(comp, name):
 				(ip).getVariable(name);
@@ -704,6 +716,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 	public void destroy() {
 		super.destroy();
 
+		_ipsList = null;
 		try {
 			if (_ips != null) {
 				final List<Interpreter> ips = new ArrayList<Interpreter>(_ips.values());
@@ -910,6 +923,7 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 
 			ip = Interpreters.newInterpreter(zslang, this);
 			_ips.put(zslang, ip);
+			_ipsList.add(ip);
 				//set first to avoid dead loop if script calls interpret again
 
 			String script = _langdef.getInitScript(zslang);
@@ -932,9 +946,9 @@ public class PageImpl extends AbstractPage implements java.io.Serializable {
 		return ip;
 	}
 
-	public Collection<Interpreter> getLoadedInterpreters() {
-		if (_ips != null)
-			return _ips.values();
+	public List<Interpreter> getLoadedInterpreters() {
+		if (_ipsList != null)
+			return _ipsList;
 		return Collections.emptyList(); //just in case
 	}
 	public String getZScriptLanguage() {

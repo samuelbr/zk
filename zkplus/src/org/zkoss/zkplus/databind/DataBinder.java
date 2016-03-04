@@ -1213,9 +1213,9 @@ public class DataBinder implements java.io.Serializable {
 	private boolean setZScriptVariable(Component comp, String beanid, Object val) {
 		//for all loaded interpreters, assign val to beanid
 		boolean found = false;
-		for(final Iterator it = comp.getPage().getLoadedInterpreters().iterator();
-		it.hasNext();) {
-			final Interpreter ip = (Interpreter) it.next();
+		List<Interpreter> loadedInterpreters = comp.getPage().getLoadedInterpreters();
+		for(int i=0; i<loadedInterpreters.size(); i++) {
+			final Interpreter ip = loadedInterpreters.get(i);
 			if (ip instanceof HierachicalAware) {
 				final HierachicalAware ha = (HierachicalAware)ip;
 				if (ha.containsVariable(comp, beanid)) {
