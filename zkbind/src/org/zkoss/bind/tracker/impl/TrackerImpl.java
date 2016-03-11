@@ -446,33 +446,52 @@ public class TrackerImpl implements Tracker, Serializable {
 	}
 	
 	private Set<TrackerNode> getAllTrackerNodesByBean(Object bean) {
-		final Set<TrackerNode> results = new LinkedHashSet<TrackerNode>();
+		final Map<TrackerNode, Boolean> results = new LinkedHashMap<TrackerNode, Boolean>();
 		getAllTrackerNodesByBean0(bean, results);
-		return results;
+		return results.keySet();
 	}
 	
-	private void getAllTrackerNodesByBean0(Object bean, Set<TrackerNode> results) {
+	private void getAllTrackerNodesByBean0(Object bean, Map<TrackerNode, Boolean> results) {
 		final Set<Object> beans = _equalBeansMap.getEqualBeans(bean); //return a set of equal beans
-		final Set<TrackerNode> nodes = new LinkedHashSet<TrackerNode>();
+		if (beans.isEmpty()) {
+			return;
+		}
+		
+		//add TrackerNodes into result map
 		for (Object obj : beans) {
 			Set<TrackerNode> beanNodes = _beanMap.get(obj);
-			if(beanNodes!=null){//zk-1185, _beanMap could contains no such entry, and returned null.
-				nodes.addAll(beanNodes);
+			if(beanNodes!=null && !beanNodes.isEmpty()){//zk-1185, _beanMap could contains no such entry, and returned null.
+				for (TrackerNode node: beanNodes) {
+					if (!results.containsKey(node)) {
+						results.putIfAbsent(node, Boolean.FALSE);	
+					}
+				}
 			}
 		}
-		results.addAll(nodes);
-		getAllTrackerNodesByBeanNodes(nodes, results);
+		
+		//process TrackerNodes recursive
+		for (Object obj : beans) {
+			Set<TrackerNode> beanNodes = _beanMap.get(obj);
+			if(beanNodes!=null && !beanNodes.isEmpty()){//zk-1185, _beanMap could contains no such entry, and returned null.
+				for (TrackerNode node: beanNodes) {
+					getAllTrackerNodesByBeanNode(node, results);
+				}
+			}
+		}
 	}
 	
 	//ZK-950: The expression reference doesn't update while change the instant of the reference
 	//Check if the passed in bean nodes contains ReferenceBindings; have to collect those
 	//nodes that refers those ReferenceBindings as well
-	private void getAllTrackerNodesByBeanNodes(Set<TrackerNode> nodes, Set<TrackerNode> results) {
-		for (TrackerNode node : nodes) {
-			final Set<ReferenceBinding> refBindings = node.getReferenceBindings();
-			for (ReferenceBinding refBinding : refBindings) {
-				getAllTrackerNodesByBean0(refBinding, results); //recursive
-			}
+	private void getAllTrackerNodesByBeanNode(TrackerNode node, Map<TrackerNode, Boolean> results) {
+		if (results.get(node)) {
+			return;
+		}
+		results.put(node, Boolean.TRUE);
+		
+		final Set<ReferenceBinding> refBindings = node.getReferenceBindings();
+		for (ReferenceBinding refBinding : refBindings) {
+			getAllTrackerNodesByBean0(refBinding, results); //recursive
 		}
 	}
 	
