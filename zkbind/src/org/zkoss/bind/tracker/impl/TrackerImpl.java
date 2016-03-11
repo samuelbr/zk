@@ -463,7 +463,7 @@ public class TrackerImpl implements Tracker, Serializable {
 			if(beanNodes!=null && !beanNodes.isEmpty()){//zk-1185, _beanMap could contains no such entry, and returned null.
 				for (TrackerNode node: beanNodes) {
 					if (!results.containsKey(node)) {
-						results.putIfAbsent(node, Boolean.FALSE);	
+						results.put(node, Boolean.FALSE);	
 					}
 				}
 			}
