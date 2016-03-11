@@ -98,7 +98,7 @@ public class Path {
      * @return the last field name of this dot series path for tracking purpose.
      */
     public String getTrackProperty() {
-    	final String script = path.listIterator(path.size()).previous().origin;
+    	final String script = path.get(path.size()-1).origin;
     	return script.charAt(0) == '.' ? script.substring(1) : script;
     }
     

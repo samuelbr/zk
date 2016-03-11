@@ -19,6 +19,8 @@ package org.zkoss.zk.ui;
 import java.util.Map;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+
 import org.zkoss.lang.ClassResolver;
 import org.zkoss.xel.FunctionMapper;
 import org.zkoss.xel.VariableResolver;
@@ -524,7 +526,7 @@ public interface Page extends IdSpace, Scope, ClassResolver {
 	public Interpreter getInterpreter(String zslang);
 	/** Returns all loaded interpreters.
 	 */
-	public Collection<Interpreter> getLoadedInterpreters();
+	public List<Interpreter> getLoadedInterpreters();
 
 	/** Returns the default scripting language which is assumed when
 	 * a zscript element doesn't specify any language.
