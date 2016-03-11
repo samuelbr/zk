@@ -30,6 +30,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Properties;
+import java.util.WeakHashMap;
 
 /**
  * 
@@ -47,6 +48,9 @@ public abstract class ExpressionFactory {
 
     private static final String SEP;
     private static final String PROPERTY_FILE;
+    
+    private static final WeakHashMap<ClassLoader, String> CLASS_NAME_SERVICE_CACHE = new WeakHashMap<ClassLoader, String>();
+    private static final String NULL_VALUE = "[NULL]";
 
     static {
         if (IS_SECURITY_ENABLED) {
@@ -205,6 +209,18 @@ public abstract class ExpressionFactory {
     }
     
     private static String getClassNameServices(ClassLoader tccl) {
+    	String classNameServices = CLASS_NAME_SERVICE_CACHE.get(tccl);
+    	if (classNameServices != null) {
+    		return classNameServices.equals(NULL_VALUE) ? null : classNameServices;
+    	}
+    	
+    	classNameServices = getClassNameServices0(tccl);
+    	
+    	CLASS_NAME_SERVICE_CACHE.put(tccl, classNameServices == null ? NULL_VALUE : classNameServices);
+    	return classNameServices;
+    }
+    
+    private static String getClassNameServices0(ClassLoader tccl) {
         InputStream is = null;
         
         if (tccl == null) {

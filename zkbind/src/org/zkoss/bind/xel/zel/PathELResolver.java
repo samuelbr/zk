@@ -13,8 +13,9 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.xel.zel;
 
 import java.beans.FeatureDescriptor;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Iterator;
-import java.util.Stack;
 
 import org.zkoss.bind.impl.Path;
 import org.zkoss.lang.Objects;
@@ -32,8 +33,8 @@ import org.zkoss.zel.impl.parser.Node;
  * @since 6.0.0
  */
 public class PathELResolver extends ELResolver {
-	private Stack<Integer> _numOfKids = new Stack<Integer>();
-	private Stack<Path> _paths = new Stack<Path>();
+	private Deque<Integer> _numOfKids = new ArrayDeque<Integer>(4);
+	private Deque<Path> _paths = new ArrayDeque<Path>(4);
 	
 	private String toNodeString(ELContext ctx) {
 		final Node node0 = (Node) ctx.getContext(Node.class);
