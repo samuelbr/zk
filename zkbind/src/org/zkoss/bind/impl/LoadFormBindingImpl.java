@@ -14,11 +14,9 @@ package org.zkoss.bind.impl;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
@@ -52,6 +50,10 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 	}
 
 	public void load(BindContext ctx) {
+		final boolean activating = ((BinderCtrl)getBinder()).isActivating();
+		
+		if(activating) return;
+		
 		final Binder binder = getBinder();
 		final BindEvaluatorX eval = binder.getEvaluatorX();
 		final Component comp = getComponent();
@@ -68,7 +70,7 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 		
 		
 		final Form form = getFormBean();
-		final boolean activating = ((BinderCtrl)getBinder()).isActivating();
+		
 		if(form instanceof FormExt){
 			FormExt fex = (FormExt)form;
 			//ZK-1005 ZK 6.0.1 validation fails on nested bean
@@ -97,18 +99,15 @@ public class LoadFormBindingImpl extends FormBindingImpl implements	LoadFormBind
 				final ExpressionX expr = getFieldExpression(eval, field);
 				if (expr != null) {
 					final Object value = eval.getValue(ctx, comp, expr);
-					if(!activating){//don't load to form if activating
-						//ZK-911. Save into Form bean via expression(so will use form's AccessFieldName)
-						final ExpressionX formExpr = getFormExpression(eval, field);
-						eval.setValue(null, comp, formExpr, value); //formExprform.setField(field, value);
-					}
+					//ZK-911. Save into Form bean via expression(so will use form's AccessFieldName)
+					final ExpressionX formExpr = getFormExpression(eval, field);
+					eval.setValue(null, comp, formExpr, value); //formExprform.setField(field, value);
 				}
 			}
-			if(activating) return;
+			
 			
 			fex.resetDirty(); //initial loading, mark form as clean
 		}
-		if(activating) return;//don't notify change if activating
 		
 		binder.notifyChange(form, "."); //notify change of fx and fx.*
 		if(form instanceof FormExt){

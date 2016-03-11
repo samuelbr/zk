@@ -13,10 +13,8 @@ Copyright (C) 2011 Potix Corporation. All Rights Reserved.
 package org.zkoss.bind.impl;
 
 import java.lang.reflect.Method;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Binder;
@@ -51,6 +49,10 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 	}
 	
 	public void load(BindContext ctx) {
+		final boolean activating = ((BinderCtrl)getBinder()).isActivating();
+		
+		if(activating) return;//don't load to component if activating
+		
 		final Component comp = getComponent();//ctx.getComponent();
 		final BindEvaluatorX eval = getBinder().getEvaluatorX();
 		final BindingExecutionInfoCollector collector = ((BinderCtrl)getBinder()).getBindingExecutionInfoCollector();
@@ -58,7 +60,6 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 		//get data from property
 		Object value = eval.getValue(ctx, comp, _accessInfo.getProperty());
 		
-		final boolean activating = ((BinderCtrl)getBinder()).isActivating();
 		
 		//use _converter to convert type if any
 		@SuppressWarnings("unchecked")
@@ -70,7 +71,6 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 //				//this sepc is different with DependsOn of a property
 //			addConverterDependsOnTrackings(conv, ctx);
 			
-			if(activating) return;//don't load to component if activating
 			Object old;
 			value = conv.coerceToUi(old = value, comp, ctx);
 			if(value == Converter.IGNORED_VALUE) {
@@ -81,7 +81,6 @@ public class LoadPropertyBindingImpl extends PropertyBindingImpl implements
 				return;
 			}
 		}
-		if(activating) return;//don't load to component if activating
 		
 		value = Classes.coerce(_attrType, value);
 		//set data into component attribute
